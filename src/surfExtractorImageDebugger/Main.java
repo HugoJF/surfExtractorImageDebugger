@@ -1,13 +1,17 @@
 package surfExtractorImageDebugger;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import boofcv.abst.feature.detdesc.DetectDescribePoint;
 import boofcv.core.image.ConvertBufferedImage;
+import boofcv.io.image.UtilImageIO;
 import boofcv.struct.feature.SurfFeature;
 import boofcv.struct.image.ImageFloat32;
 import boofcv.struct.image.ImageUInt8;
@@ -20,36 +24,58 @@ import surfExtractor.surf_extractor.SurfExtractor;
 
 public class Main {
 
+	public ParameterInterface pi = new ParameterInterface(this);
+	public ImageInterface ii = new ImageInterface(this);
+	public SurfExtractor se = new SurfExtractor();
+	
+	public int radius = 2;
+	public float threshold = 0;
+	public int ignoreBorder = 5;
+	public boolean strictRule = true;
+	public int maxFeaturesPerScale = 500;
+	public int initialSampleRate = 2;
+	public int initialSize = 9;
+	public int numberScalesPerOctave = 4;
+	public int numberOfOctaves = 4;
+	
+	public String imagePath = "C:\\polen23e\\croton_urucurana\\croton_01.jpg";
+	public DetectDescribePoint<ImageFloat32, SurfFeature> imageFeatures;
+	
 	public static void main(String[] args) {
 		try {
 			new Main();
-		} catch (FileNotFoundException | InterruptedException e) {
+		} catch (InterruptedException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public Main() throws FileNotFoundException, InterruptedException {
-		ImageSet is = new ImageSet("c:/polen23e");
-		ArrayList<ImageClass> images = is.getImageClasses();
+	public Main() throws InterruptedException, IOException {
+		pi.setVisible(true);
+		ii.setVisible(true);
+		ii.setImageFeatures(se.easy(UtilImageIO.loadImage(imagePath, ImageFloat32.class)));
+		ii.drawImage(ImageIO.read(new File(imagePath)));
 
-		ImageVisualization iv = new ImageVisualization();
-		iv.setVisible(true);
-		iv.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		surfExtractor.surf_extractor.SurfExtractor se = new surfExtractor.surf_extractor.SurfExtractor();
-		
-		for(ImageClass ic : images) {
-			for(Image i : ic.getImages()) {
-				String path = i.getFile().getAbsolutePath();
-				iv.setImagePath(path);
-				ImageFloat32 temp = null;
-				iv.setImageFeatures(se.easy(ConvertBufferedImage.convertFrom(IJ.openImage(path).getBufferedImage(), temp)));
-				iv.repaint();
-				Thread.sleep(500);
-				System.out.println("Drawing image");
-			}
-			
+	}
+	
+	public void update() {
+		System.out.println("Updating extractor parameters");
+		se.setRadius(radius);
+		se.setThreshold(threshold);
+		se.setIgnoreBorder(ignoreBorder);
+		se.setStrictRule(strictRule);
+		se.setMaxFeaturesPerScale(maxFeaturesPerScale);
+		se.setInitialSampleRate(initialSampleRate);
+		se.setInitialSize(initialSize);
+		se.setNumberOfOctaves(numberOfOctaves);
+		se.setNumberScalesPerOctave(numberScalesPerOctave);
+		imageFeatures = se.easy(UtilImageIO.loadImage(imagePath, ImageFloat32.class));
+		ii.setImageFeatures(imageFeatures);
+		System.out.println("Features detected: " + imageFeatures.getNumberOfFeatures());
+		try {
+			ii.drawImage(ImageIO.read(new File(imagePath)));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
 	}
 }

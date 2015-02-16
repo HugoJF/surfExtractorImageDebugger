@@ -23,5 +23,8 @@
 	<classpathentry kind="lib" path="C:/boofcv-libs/BoofCV-visualize-0.18.jar"/>
 	<classpathentry kind="lib" path="C:/boofcv-libs/BoofCV-WebcamCapture-0.18.jar"/>
 	<classpathentry kind="lib" path="C:/boofcv-libs/BoofCV-xuggler-0.18.jar"/>
+	<classpathentry kind="lib" path="C:/apache-log4j-2.0.2-bin/log4j-1.2-api-2.0.2.jar"/>
+	<classpathentry kind="lib" path="C:/apache-log4j-2.0.2-bin/log4j-api-2.0.2.jar"/>
+	<classpathentry kind="lib" path="C:/apache-log4j-2.0.2-bin/log4j-core-2.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
