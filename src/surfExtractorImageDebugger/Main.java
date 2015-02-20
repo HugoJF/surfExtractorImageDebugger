@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -27,7 +28,7 @@ public class Main {
 	public ParameterInterface pi = new ParameterInterface(this);
 	public ImageInterface ii = new ImageInterface(this);
 	public SurfExtractor se = new SurfExtractor();
-	
+
 	public int radius = 2;
 	public float threshold = 0;
 	public int ignoreBorder = 5;
@@ -37,10 +38,14 @@ public class Main {
 	public int initialSize = 9;
 	public int numberScalesPerOctave = 4;
 	public int numberOfOctaves = 4;
-	
+
+	public long lastImageUpdate = 0;
+
 	public String imagePath = "C:\\polen23e\\croton_urucurana\\croton_01.jpg";
 	public DetectDescribePoint<ImageFloat32, SurfFeature> imageFeatures;
-	
+	public ImageSet is = null;
+	Random rand = new Random();
+
 	public static void main(String[] args) {
 		try {
 			new Main();
@@ -51,14 +56,32 @@ public class Main {
 	}
 
 	public Main() throws InterruptedException, IOException {
+		try {
+			this.is = new ImageSet("C:\\polen23e");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		pi.setVisible(true);
 		ii.setVisible(true);
 		ii.setImageFeatures(se.easy(UtilImageIO.loadImage(imagePath, ImageFloat32.class)));
 		ii.drawImage(ImageIO.read(new File(imagePath)));
 
 	}
-	
+
 	public void update() {
+		if (System.currentTimeMillis() - lastImageUpdate > 100) {
+			System.out.println("Updating image");
+			lastImageUpdate = System.currentTimeMillis();
+			int counter = rand.nextInt(805);
+			for (ImageClass ic : is.getImageClasses()) {
+				for (Image i : ic.getImages()) {
+					counter--;
+					if (counter == 0) {
+						this.imagePath = i.getFile().getAbsolutePath();
+					}
+				}
+			}
+		}
 		System.out.println("Updating extractor parameters");
 		se.setRadius(radius);
 		se.setThreshold(threshold);
