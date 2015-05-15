@@ -27,7 +27,8 @@ public class Main {
 
 	public ParameterInterface pi = new ParameterInterface(this);
 	public ImageInterface ii = new ImageInterface(this);
-	public SurfDescriptor se = new SurfDescriptor();
+	//TODO
+	public SurfExtractor se = new SurfExtractor();
 
 	public int radius = 2;
 	public float threshold = 0;
@@ -41,7 +42,7 @@ public class Main {
 
 	public long lastImageUpdate = 0;
 
-	public String imagePath = "C:\\polen23e\\acacia_plumosa\\acacia_1.jpg";
+	public String imagePath = "C:\\polen23e\\croton_urucurana\\croton_01.jpg";
 	public DetectDescribePoint<ImageFloat32, SurfFeature> imageFeatures;
 	public ImageSet is = null;
 	Random rand = new Random();
