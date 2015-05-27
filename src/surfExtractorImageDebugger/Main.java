@@ -18,10 +18,10 @@ import boofcv.struct.image.ImageFloat32;
 import boofcv.struct.image.ImageUInt8;
 import ij.IJ;
 import ij.ImageJ;
+import surfExtractor.SurfExtractor;
 import surfExtractor.image_set.Image;
 import surfExtractor.image_set.ImageClass;
 import surfExtractor.image_set.ImageSet;
-import surfExtractor.surf_extractor.SurfExtractor;
 
 public class Main {
 
