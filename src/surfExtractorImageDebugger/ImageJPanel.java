@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import boofcv.abst.feature.detdesc.DetectDescribePoint;
 import boofcv.struct.feature.SurfFeature;
 import boofcv.struct.image.ImageFloat32;
-import surfExtractor.surf_extractor.TaggedSurfFeature;
+import surfExtractor.TaggedSurfFeature;
 
 public class ImageJPanel extends JPanel {
 

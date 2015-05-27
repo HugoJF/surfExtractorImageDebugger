@@ -18,6 +18,8 @@ import boofcv.struct.image.ImageFloat32;
 import boofcv.struct.image.ImageUInt8;
 import ij.IJ;
 import ij.ImageJ;
+
+import surfExtractor.SurfDescriptor;
 import surfExtractor.SurfExtractor;
 import surfExtractor.image_set.Image;
 import surfExtractor.image_set.ImageClass;
@@ -27,7 +29,8 @@ public class Main {
 
 	public ParameterInterface pi = new ParameterInterface(this);
 	public ImageInterface ii = new ImageInterface(this);
-	public SurfExtractor se = new SurfExtractor();
+	//TODO
+	public SurfDescriptor sd = new SurfDescriptor();
 
 	public int radius = 2;
 	public float threshold = 0;
@@ -63,7 +66,11 @@ public class Main {
 		}
 		pi.setVisible(true);
 		ii.setVisible(true);
-		ii.setImageFeatures(se.easy(UtilImageIO.loadImage(imagePath, ImageFloat32.class)));
+		BufferedImage bi = IJ.openImage(imagePath).getBufferedImage();
+		ImageFloat32 if32 = new ImageFloat32(bi.getWidth(), bi.getHeight());
+		ConvertBufferedImage.convertFrom(bi, if32);
+		ii.setImageFeatures(sd.easy(if32));
+		
 		ii.drawImage(ImageIO.read(new File(imagePath)));
 
 	}
@@ -83,16 +90,16 @@ public class Main {
 			}
 		}
 		System.out.println("Updating extractor parameters");
-		se.setRadius(radius);
-		se.setThreshold(threshold);
-		se.setIgnoreBorder(ignoreBorder);
-		se.setStrictRule(strictRule);
-		se.setMaxFeaturesPerScale(maxFeaturesPerScale);
-		se.setInitialSampleRate(initialSampleRate);
-		se.setInitialSize(initialSize);
-		se.setNumberOfOctaves(numberOfOctaves);
-		se.setNumberScalesPerOctave(numberScalesPerOctave);
-		imageFeatures = se.easy(UtilImageIO.loadImage(imagePath, ImageFloat32.class));
+		sd.setRadius(radius);
+		sd.setThreshold(threshold);
+		sd.setIgnoreBorder(ignoreBorder);
+		sd.setStrictRule(strictRule);
+		sd.setMaxFeaturesPerScale(maxFeaturesPerScale);
+		sd.setInitialSampleRate(initialSampleRate);
+		sd.setInitialSize(initialSize);
+		sd.setNumberOfOctaves(numberOfOctaves);
+		sd.setNumberScalesPerOctave(numberScalesPerOctave);
+		imageFeatures = sd.easy(UtilImageIO.loadImage(imagePath, ImageFloat32.class));
 		ii.setImageFeatures(imageFeatures);
 		System.out.println("Features detected: " + imageFeatures.getNumberOfFeatures());
 		try {
